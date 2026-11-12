@@ -32,6 +32,12 @@ int main()
     cout << "Enter number of fill-ups: ";
     cin >> fillups;
 
+    while (fillups < 1 || fillups > MAX_FILLUPS)
+    {
+        cout << "Invalid number of fill-ups. Enter 1 to 20: ";
+        cin >> fillups;
+    }
+
     for (int i = 0; i < fillups; i++)
     {
         cout << "Fill-up " << i + 1
@@ -42,6 +48,21 @@ int main()
             >> unit[i]
             >> price[i]
             >> totalSale[i];
+
+        while (unit[i] != 'G' && unit[i] != 'L' ||
+            odometer[i + 1] <= odometer[i])
+        {
+            cout << "Invalid unit or odometer reading. Try again." << endl;
+
+            cout << "Fill-up " << i + 1
+                << " (odometer, amount, G or L, price, total): ";
+
+            cin >> odometer[i + 1]
+                >> amount[i]
+                >> unit[i]
+                >> price[i]
+                >> totalSale[i];
+        }
     }
 
     cout << endl;
