@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+#include <cstdio>
 using namespace std;
 
 const int MAX_FILLUPS = 20;
@@ -25,6 +26,14 @@ int main()
     char unit[MAX_FILLUPS];
     double price[MAX_FILLUPS];
     double totalSale[MAX_FILLUPS];
+
+    double miles[MAX_FILLUPS];
+    double gallons[MAX_FILLUPS];
+    double mpg[MAX_FILLUPS];
+    double cost[MAX_FILLUPS];
+    double costMile[MAX_FILLUPS];
+
+    double budget;
 
     cout << "Enter starting odometer reading: ";
     cin >> odometer[0];
@@ -49,7 +58,7 @@ int main()
             >> price[i]
             >> totalSale[i];
 
-        while (unit[i] != 'G' && unit[i] != 'L' ||
+        while ((unit[i] != 'G' && unit[i] != 'L') ||
             odometer[i + 1] <= odometer[i])
         {
             cout << "Invalid unit or odometer reading. Try again." << endl;
@@ -65,17 +74,60 @@ int main()
         }
     }
 
-    cout << endl;
-    cout << "Fuel Log" << endl;
+    cout << "Enter fuel budget for the trip: ";
+    cin >> budget;
+
+    // Calculate each leg
+    for (int i = 0; i < fillups; i++)
+    {
+        miles[i] = odometer[i + 1] - odometer[i];
+        gallons[i] = toGallons(amount[i], unit[i]);
+        mpg[i] = milesPerGallon(miles[i], gallons[i]);
+        cost[i] = totalSale[i];
+        costMile[i] = costPerMile(cost[i], miles[i]);
+    }
+
+    // Print report
+    printf("\n");
+    printf("Leg      Miles   Gallons     MPG        Cost   Cost/mile\n");
 
     for (int i = 0; i < fillups; i++)
     {
-        cout << "Fill-up " << i + 1 << ": ";
-        cout << odometer[i + 1] << " ";
-        cout << amount[i] << " ";
-        cout << unit[i] << " ";
-        cout << price[i] << " ";
-        cout << totalSale[i] << endl;
+        printf("%3d %10.1f %9.2f %7.1f   $%8.2f   $%8.3f\n",
+            i + 1, miles[i], gallons[i], mpg[i],
+            cost[i], costMile[i]);
+    }
+
+    double totalMiles = sumOf(miles, fillups);
+    double totalGallons = sumOf(gallons, fillups);
+    double totalCost = sumOf(cost, fillups);
+
+    double overallMPG = milesPerGallon(totalMiles, totalGallons);
+    double overallCostMile = costPerMile(totalCost, totalMiles);
+
+    int cheapest = indexOfSmallest(costMile, fillups);
+    int expensive = indexOfLargest(costMile, fillups);
+
+    printf("\nTotal miles: %.1f\n", totalMiles);
+    printf("Total gallons: %.2f\n", totalGallons);
+    printf("Overall MPG: %.1f\n", overallMPG);
+    printf("Total fuel cost: $%.2f\n", totalCost);
+    printf("Overall cost per mile: $%.3f\n", overallCostMile);
+
+    printf("Cheapest leg per mile: Leg %d\n", cheapest + 1);
+    printf("Most expensive leg per mile: Leg %d\n", expensive + 1);
+
+    if (totalCost < budget)
+    {
+        printf("Under budget by $%.2f\n", budget - totalCost);
+    }
+    else if (totalCost > budget)
+    {
+        printf("Over budget by $%.2f\n", totalCost - budget);
+    }
+    else
+    {
+        printf("Exactly on budget by $0.00\n");
     }
 
     return 0;
