@@ -1,16 +1,20 @@
 //Landen Drees MP3 Fuel Logs
 
+
 #include <iostream>
 using namespace std;
 
 // Function prototypes
 double toGallons(double amount, char unit);
 double fillUpCost(double amount, double pricePerUnit);
+double milesPerGallon(double miles, double gallons);
+double costPerMile(double cost, double miles);
 
 int main()
 {
     double amount;
     double price;
+    double miles;
     char unit;
 
     cout << "Enter fuel amount: ";
@@ -22,8 +26,16 @@ int main()
     cout << "Enter price per unit: ";
     cin >> price;
 
-    cout << "Gallons: " << toGallons(amount, unit) << endl;
-    cout << "Fill-up cost: $" << fillUpCost(amount, price) << endl;
+    cout << "Enter miles driven: ";
+    cin >> miles;
+
+    double gallons = toGallons(amount, unit);
+    double cost = fillUpCost(amount, price);
+
+    cout << "Gallons: " << gallons << endl;
+    cout << "Fill-up cost: $" << cost << endl;
+    cout << "Miles per gallon: " << milesPerGallon(miles, gallons) << endl;
+    cout << "Cost per mile: $" << costPerMile(cost, miles) << endl;
 
     return 0;
 }
@@ -43,4 +55,14 @@ double toGallons(double amount, char unit)
 double fillUpCost(double amount, double pricePerUnit)
 {
     return amount * pricePerUnit;
+}
+
+double milesPerGallon(double miles, double gallons)
+{
+    return miles / gallons;
+}
+
+double costPerMile(double cost, double miles)
+{
+    return cost / miles;
 }
