@@ -5,6 +5,8 @@
 #include <iostream>
 using namespace std;
 
+const int MAX_FILLUPS = 20;
+
 // Function prototypes
 double toGallons(double amount, char unit);
 double fillUpCost(double amount, double pricePerUnit);
@@ -16,37 +18,44 @@ int indexOfLargest(double values[], int count);
 
 int main()
 {
-    double amount;
-    double price;
-    double miles;
-    char unit;
+    int fillups;
 
-    cout << "Enter fuel amount: ";
-    cin >> amount;
+    double odometer[MAX_FILLUPS + 1];
+    double amount[MAX_FILLUPS];
+    char unit[MAX_FILLUPS];
+    double price[MAX_FILLUPS];
+    double totalSale[MAX_FILLUPS];
 
-    cout << "Enter unit (G or L): ";
-    cin >> unit;
+    cout << "Enter starting odometer reading: ";
+    cin >> odometer[0];
 
-    cout << "Enter price per unit: ";
-    cin >> price;
+    cout << "Enter number of fill-ups: ";
+    cin >> fillups;
 
-    cout << "Enter miles driven: ";
-    cin >> miles;
+    for (int i = 0; i < fillups; i++)
+    {
+        cout << "Fill-up " << i + 1
+            << " (odometer, amount, G or L, price, total): ";
 
-    double gallons = toGallons(amount, unit);
-    double cost = fillUpCost(amount, price);
+        cin >> odometer[i + 1]
+            >> amount[i]
+            >> unit[i]
+            >> price[i]
+            >> totalSale[i];
+    }
 
-    cout << "Gallons: " << gallons << endl;
-    cout << "Fill-up cost: $" << cost << endl;
-    cout << "Miles per gallon: " << milesPerGallon(miles, gallons) << endl;
-    cout << "Cost per mile: $" << costPerMile(cost, miles) << endl;
+    cout << endl;
+    cout << "Fuel Log" << endl;
 
-    // Test array functions
-    double numbers[5] = { 10, 25, 5, 40, 15 };
-
-    cout << "Sum: " << sumOf(numbers, 5) << endl;
-    cout << "Smallest index: " << indexOfSmallest(numbers, 5) << endl;
-    cout << "Largest index: " << indexOfLargest(numbers, 5) << endl;
+    for (int i = 0; i < fillups; i++)
+    {
+        cout << "Fill-up " << i + 1 << ": ";
+        cout << odometer[i + 1] << " ";
+        cout << amount[i] << " ";
+        cout << unit[i] << " ";
+        cout << price[i] << " ";
+        cout << totalSale[i] << endl;
+    }
 
     return 0;
 }
